@@ -212,7 +212,9 @@ function start() {
     --kubernetes-version=v$KUBERNETES_VERSION \
     --vm-driver=$VM_DRIVER \
     --disk-size=$DISK_SIZE \
-    --bootstrapper=kubeadm
+    --bootstrapper=kubeadm \
+    --network-plugin=cni \
+    --enable-default-cni \
 
     waitForMinikubeToBeUp
 

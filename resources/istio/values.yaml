@@ -33,7 +33,7 @@ gateways:
         limits:
           cpu: 50m
           memory: 64Mi
-    secretVolumes: {}
+    secretVolumes: []
     ports:
       ## You can add custom gateway ports
       # Note that AWS ELB will by default perform health checks on the first port
@@ -187,7 +187,7 @@ certmanager:
 #   settings for the istio-proxy.
 #
 istio_cni:
-  enabled: false
+  enabled: true
 
 # addon Istio CoreDNS configuration
 #
