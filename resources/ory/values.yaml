@@ -1,2 +1,105 @@
+# Global or kyma related overrides
 global:
   gateway: kyma-gateway
+  ingress:
+    domainName: kyma.local
+hpa:
+  oathkeeper:
+    minReplicas: 1
+    maxReplicas: 3
+    metrics:
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: 75
+
+# Overrides for the Hydra chart
+hydra:
+  ingress:
+    public:
+      enabled: false
+    admin:
+      enabled: false
+  hydra:
+    # The ORY Hydra configuration. For a full list of available settings, check:
+    #   https://github.com/ory/hydra/blob/master/docs/config.yaml
+    config:
+      serve:
+        public:
+          port: 4444
+        admin:
+          port: 4445
+        tls:
+          allow_termination_from:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+      secrets:
+        system: a3m0kCx6f87n332sPw1
+      urls:
+        self: {}
+      dsn: memory
+
+    autoMigrate: false
+    dangerousForceHttp: true
+    dangerousAllowInsecureRedirectUrls: false
+  resources:
+    limits:
+      cpu: 100m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+# Overrides for the Oathkeeper chart
+oathkeeper:
+  oathkeeper:
+    config:
+      authenticators:
+        oauth2_introspection:
+          # Set enabled to true if the authenticator should be enabled and false to disable the authenticator. Defaults to false.
+          enabled: true
+
+          # REQUIRED IF ENABLED - The OAuth 2.0 Token Introspection endpoint.
+          introspection_url: http://ory-hydra-admin:4445/oauth2/introspect
+
+          # Sets the strategy to be used to validate/match the token scope. Supports "hierarchic", "exact", "wildcard", "none". Defaults
+          # to "none".
+          scope_strategy: exact
+        # Enable the "jwt" section to allow for jwt authenticator configured for local Dex Id Tokens.
+        #jwt:
+        #  enabled: true
+        #  jwks_urls:
+        #    - http://dex-service.kyma-system.svc.cluster.local:5556/keys
+        #  scope_strategy: wildcard
+      authorizers:
+        allow:
+          enabled: true
+      mutators:
+        noop:
+          enabled: true
+      serve:
+        proxy:
+          port: 4455
+        api:
+          port: 4456
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  image:
+    tag: v0.17.1-beta.1
+
+maester:
+  annotations:
+    sidecar.istio.io/inject: "false"
+  resources:
+    limits:
+      cpu: 100m
+      memory: 50Mi
+    requests:
+      cpu: 50m
+      memory: 20Mi
