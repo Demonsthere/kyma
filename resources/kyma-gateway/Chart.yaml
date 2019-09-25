@@ -1,4 +1,4 @@
-name: Kyma gateway
+name: kyma-gateway
 version: 0.0.1
 description: Gateway for  Kyma 
 keywords:

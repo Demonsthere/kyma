@@ -81,3 +81,6 @@ spec:
     #  namespace: "compass-system"
     #- name: "compass-runtime-agent"
     #  namespace: "compass-system"
+    - name: kyma-gateway
+      namespace: kyma-system
+

@@ -1,4 +1,7 @@
 global:
+  istio:
+    gateway:
+      name: kyma-gateway
   compass:
     mtls:
       secret:
